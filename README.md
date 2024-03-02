@@ -6,10 +6,10 @@ Need to build the application, then move the hashes file to a convenient locatio
 For example:
 ```sh
 git clone --depth=1 https://github.com/Valera6/doc_scraper /tmp/doc_scraper && \
-go build /tmp/doc_scraper/cmd/main.go && 
-mv /tmp/doc_scraper/build/doc_scraper /usr/local/bin/doc_scraper && \
-mkdir ~/tmp && \
-cp /tmp/doc_scraper/starting_hashes.json ~/tmp/doc_scraper_hashes.json && \
+cd /tmp/doc_scraper && \
+sudo go build -o /usr/local/bin/doc_scraper ./cmd/main.go && \
+cd - &>/dev/null && \
+mkdir -p ~/tmp && cp /tmp/doc_scraper/starting_hashes.json ~/tmp/doc_scraper_hashes.json && \
 doc_scraper init
 ```
 

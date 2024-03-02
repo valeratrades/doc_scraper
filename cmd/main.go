@@ -118,8 +118,11 @@ func NewTgArgs(input string) (TgArgs, error) {
 
 func runApplication(c *cli.Context) error {
 	initFlag := c.Command.Name == "init"
-	tgInfo := c.String("telegram")
+	if initFlag {
+		fmt.Println("Initializing Hashes...")
+	}
 
+	tgInfo := c.String("telegram")
 	var tgArgs TgArgs
 	var err error
 
