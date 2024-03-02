@@ -52,19 +52,19 @@ func saveHashes(filePath string, hashes Hashes) error {
 func writeChanges(hashes Hashes, key string, init bool, tgArgs TgArgs) {
 	parts := strings.Split(key, "\n\n###\n\n")
 	if len(parts) != 2 {
-		fmt.Printf("Key format is incorrect, expecting 'url\\n\\n###\\n\\nhtmlClass' in hashes json file. Got: %s\n", key)
+		fmt.Fprintf(os.Stderr, "Key format is incorrect, expecting 'url\\n\\n###\\n\\nhtmlClass' in hashes json file. Got: %s\n", key)
 		return
 	}
 	url, htmlClass := parts[0], parts[1]
 	resp, err := http.Get(url)
 	if err != nil || resp.StatusCode != http.StatusOK {
-		fmt.Printf("Failed to fetch content from %s. Skipping...\n", url)
+		fmt.Fprintf(os.Stderr, "Failed to fetch content from %s. Skipping...\n", url)
 		return
 	}
 	defer resp.Body.Close()
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
-		fmt.Printf("Error parsing the HTML from %s. Skipping...\n", url)
+		fmt.Fprintf(os.Stderr, "Error parsing the HTML from %s. Skipping...\n", url)
 		return
 	}
 	contentBlock := ""
@@ -81,8 +81,10 @@ func writeChanges(hashes Hashes, key string, init bool, tgArgs TgArgs) {
 	newHash := getSHA256Hash(contentBlock)
 	oldHash := hashes[key]
 	if oldHash == "" || oldHash != newHash {
-		fmt.Printf("Content changed for URL: %s\n", url)
-		utils.Msg(tgArgs.BotToken, tgArgs.ChatId, fmt.Sprintf("Content changed for URL: %s\n", url))
+		fmt.Fprintf(os.Stderr, "Content changed for URL: %s\n", url)
+		if tgArgs.BotToken != "" && tgArgs.ChatId != 0 {
+			utils.Msg(tgArgs.BotToken, tgArgs.ChatId, fmt.Sprintf("Content changed for URL: %s\n", url))
+		}
 		hashes[key] = newHash
 	}
 }
@@ -94,10 +96,7 @@ type TgArgs struct {
 
 func NewTgArgs(input string) (TgArgs, error) {
 	if input == "" {
-		return TgArgs{
-			BotToken: "6225430873:AAEYlbJ2bY-WsLADxlWY1NS-z4r75sf9X5I",
-			ChatId:   -1001800341082,
-		}, nil
+		return TgArgs{}, nil
 	}
 
 	parts := strings.Split(input, ",")
@@ -180,7 +179,7 @@ func main() {
 			Flags: []cli.Flag{
 				&cli.StringFlag{
 					Name:  "telegram",
-					Usage: "Telegram bot token and chat ID to receive notification on; format: 'token,chatID'",
+					Usage: "Telegram bot token and chat ID to receive notification on; format: 'token,chatID'. Ex: '123456:ABC-DEF1234ghIkl-zyx57W2,-1234567890'",
 				},
 				&cli.StringFlag{
 					Name:  "path",
