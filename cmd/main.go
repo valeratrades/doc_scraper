@@ -1,9 +1,5 @@
 package main
 
-//TODO!: \
-//Also most of these exchanges use cloudflare for caching, so pass some random query string at the end of url so it doesn't load from cloudflare's cache which could be stale.
-//Learned it the hard way few years back.
-
 import (
 	"crypto/sha256"
 	"encoding/hex"
@@ -21,6 +17,8 @@ import (
 	"github.com/urfave/cli"
 )
 
+// Instead of hashing the contents, could also just make a call with [If-Modified-Since Header](<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since>)
+// But that wouldn't scale to some exchanges. Can still do as a backup option if needed - open an issue.
 type Hashes map[string]string
 
 func getSHA256Hash(text string) string {
