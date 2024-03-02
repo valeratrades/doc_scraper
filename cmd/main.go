@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
@@ -55,6 +56,11 @@ func writeChanges(hashes Hashes, key string, init bool, tgArgs TgArgs) {
 		return
 	}
 	url, htmlClass := parts[0], parts[1]
+
+	// Append a random query string to bypass Cloudflare's cache
+	randomQueryString := fmt.Sprintf("?nocache=%d", rand.Intn(1000000))
+	url += randomQueryString
+
 	resp, err := http.Get(url)
 	if err != nil || resp.StatusCode != http.StatusOK {
 		fmt.Fprintf(os.Stderr, "Failed to fetch content from %s. Skipping...\n", url)
