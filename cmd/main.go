@@ -12,7 +12,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -130,14 +129,18 @@ func runApplication(c *cli.Context) error {
 		return err
 	}
 
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return fmt.Errorf("failed to get user home directory: %v", err)
-	}
-	defaultPath := filepath.Join(homeDir, "tmp", "doc_scraper_hashes.json")
+	defaultPath := "~/tmp/doc_scraper_hashes.json"
 	filePath := c.String("path")
 	if filePath == "" {
 		filePath = defaultPath
+	}
+	if strings.HasPrefix(filePath, "~") {
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Println("Error getting user home directory:", err)
+			return err
+		}
+		filePath = homeDir + filePath[1:]
 	}
 
 	originalHashes, err := loadHashes(filePath)
@@ -174,7 +177,7 @@ func main() {
 	app.Commands = []cli.Command{
 		{
 			Name:   "check",
-			Usage:  "Loads hashes and url:tmlClass from ./data/hashes.json",
+			Usage:  "Loads hashes and url:htmlClass from specified --path",
 			Action: runApplication,
 			Flags: []cli.Flag{
 				&cli.StringFlag{
