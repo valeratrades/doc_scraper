@@ -17,12 +17,3 @@ func Msg(botToken string, chatID int64, msg string) {
 		log.Println("Error sending message:", err)
 	}
 }
-
-func MsgToValera(msg string) {
-	const (
-		valeraBotToken = "6225430873:AAEYlbJ2bY-WsLADxlWY1NS-z4r75sf9X5I"
-		valeraChatID   = -1001800341082
-	)
-
-	Msg(valeraBotToken, valeraChatID, msg)
-}
