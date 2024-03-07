@@ -19,10 +19,11 @@ Command to run is:
 ```sh
 doc_scraper check # optionally provide --path argument, if the hashes file is not in ~/tmp/doc_scraper_hashes.json
 ```
+
 If any changes are detected:
-    - prints them to stderr
-    - sends message to a tg channel, if flag with (token,chatID) provided
-    - exits with 1
+- prints them to stderr
+- sends message to a tg channel, if flag with (token,chatID) provided
+- exits with 1
 
 # Limitations
 - Made with Linux in mind.
