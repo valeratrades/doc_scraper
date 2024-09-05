@@ -1,4 +1,5 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/valeratrades/doc_scraper)](https://goreportcard.com/report/github.com/valeratrades/doc_scraper)
+![Audit](https://github.com/valeratrades/doc_scraper/actions/workflows/audit.yml/badge.svg)
 
 # doc_scraper
 Tiny util, intended to be run once a day, in order to detect any changes in api documentation.
