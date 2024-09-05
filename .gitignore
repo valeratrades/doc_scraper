@@ -1,20 +1,2 @@
-**/target/
-**/debug/
-.DS_Store
-*.sw[po]
-**/_*
-**/TODO.md
-.local.sh
-**/tmp/
-
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-bin/
-*.test
-*.out
+## Golang
 go.work
-.env
-
