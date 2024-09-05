@@ -1,5 +1,5 @@
-# Based on https://github.com/mvdan/github-actions-golang
-on: [pull_request, workflow_dispatch]
+# Based rn https://github.com/mvdan/github-actions-golang
+on: [push, pull_request]
 name: CI
 jobs:
   test:
